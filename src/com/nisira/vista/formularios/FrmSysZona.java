@@ -614,25 +614,29 @@ public class FrmSysZona extends NSRInternalFrame implements InternalFrameListene
 				if(this.listField!=null){
 					if(this.listField.size()>0){
 						tecladoMovil_RfidUbicacion=new ObjetoTecladoMovil();
+						Object[] items =new Object[2];
+						int c= 0;
     					for(JTextLabelPanel obj:listField){
     						obj.value=obj.textField.getText();
-    						/*------------idubicacion------------*/
-    						DZONAGENERAL dzonageneral = SerieChipADZGeneral(obj.value);
-    						if(dzonageneral!=null){
-    							observable_pos_actual.actualizar_parpadeo(dzonageneral);
-    						}
-    						/*------------------------------------*/
-    						tecladoMovil_RfidUbicacion=new ObjetoTecladoMovil("RFID",obj.descripcion,obj.id,obj.value);
-    						objectPanelTexto[4] =obj.value;
-    						/*OBTENER ZONA*/
-    						if(obj.value!=null){
-//    							if(!obj.value.equals("")){
-//    								panelZona.selectActual=panelZona.findUbicacion(obj.value);
-//    								if(panelZona.selectActual!=null)
-//    									objectPanelTexto[2]=panelZona.selectActual.getZONA();
-//        						}
-    						}
+    						items[c]= obj.textField.getText();
+    						c++;
     					}
+    					/*------------idubicacion------------*/
+						DZONAGENERAL dzonageneral = SerieChipADZGeneral((String)items[0],(String)items[1]);
+						if(dzonageneral!=null){
+							observable_pos_actual.actualizar_parpadeo(dzonageneral);
+						}
+						/*------------------------------------*/
+//						tecladoMovil_RfidUbicacion=new ObjetoTecladoMovil("RFID",obj.descripcion,obj.id,obj.value);
+//						objectPanelTexto[4] =obj.value;
+//						/*OBTENER ZONA*/
+//						if(obj.value!=null){
+////							if(!obj.value.equals("")){
+////								panelZona.selectActual=panelZona.findUbicacion(obj.value);
+////								if(panelZona.selectActual!=null)
+////									objectPanelTexto[2]=panelZona.selectActual.getZONA();
+////    						}
+//						}
     				}
 				}
 				int x=1;
@@ -644,7 +648,7 @@ public class FrmSysZona extends NSRInternalFrame implements InternalFrameListene
 		};
 		manualRfid.setLocation(getWidth()/2,(getHeight()/2)-100);
 		/*DEFINICIONES*/
-		manualRfid.listField.add(new JTextLabelPanel(0,"Codigo","UBICACIÓN","",30){
+		manualRfid.listField.add(new JTextLabelPanel(0,"Codigo","UBICACIÓN 1","",30){
 			@Override
 			public void ordenfocusPanel(){
 				if(manualRfid.listField.size()-1== row)
@@ -654,7 +658,18 @@ public class FrmSysZona extends NSRInternalFrame implements InternalFrameListene
 				}
 					
 			}
-		});        		
+		});     
+		manualRfid.listField.add(new JTextLabelPanel(0,"Codigo","UBICACIÓN 2","",30){
+			@Override
+			public void ordenfocusPanel(){
+				if(manualRfid.listField.size()-1== row)
+					manualRfid.listField.get(0).textField.requestFocus();
+				else{
+					manualRfid.listField.get(row+1).textField.requestFocus();
+				}
+					
+			}
+		});     
 		manualRfid.cargarRow();
 		manualRfid.show();
 		manualRfid.ordenfocus(0);
@@ -880,12 +895,13 @@ public class FrmSysZona extends NSRInternalFrame implements InternalFrameListene
 		hilo.start();
 	}
     
-    public DZONAGENERAL SerieChipADZGeneral(String seriechip){
+    public DZONAGENERAL SerieChipADZGeneral(String seriechip1,String seriechip2){
+    	List<DASIGNACIONCHIPS> ldasignacionchips;
     	DASIGNACIONCHIPS dasignacionchips;
     	DZONAGENERAL dz = null;
 		try {
-			
-			dasignacionchips = (new DASIGNACIONCHIPSDao()).getAsignacionChips(Inicio.idempresa, Inicio.idsucursal, seriechip);
+			ldasignacionchips = (new DASIGNACIONCHIPSDao()).getAsignacionChips2(Inicio.idempresa, Inicio.idsucursal, seriechip1,seriechip2);
+			dasignacionchips = ldasignacionchips.get(0);
 			if(dasignacionchips!=null){
 				dz = dzonaGeneralDao.getDZonaGeneral(dasignacionchips.getIDEMPRESA(), 
 						dasignacionchips.getIDSUCURSAL(), dasignacionchips.getCORDENADAXT(),

@@ -5,7 +5,9 @@ import com.nisira.core.NisiraORMException;
 import com.nisira.entidad.DASIGNACIONCHIPS;
 import com.nisira.entidad.DZONAGENERAL;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DASIGNACIONCHIPSDao extends BaseDao<DASIGNACIONCHIPS> {
@@ -36,5 +38,17 @@ public class DASIGNACIONCHIPSDao extends BaseDao<DASIGNACIONCHIPS> {
 		} else {
 			return l.get(0);
 		}
+	}
+	public List<DASIGNACIONCHIPS> getAsignacionChips2(Integer IDEMPRESA, Integer IDSUCURSAL, String SERIECHIP1,String SERIECHIP2) throws NisiraORMException, SQLException{
+		List<DASIGNACIONCHIPS> lista = new ArrayList<DASIGNACIONCHIPS>();
+        ResultSet rs = null;
+        rs = execProcedure(1,"GETPOSTCHIPS",SERIECHIP1,SERIECHIP2,IDEMPRESA,IDSUCURSAL);
+        DZONAGENERAL dZonaGeneral;
+        while(rs.next()){
+        	DASIGNACIONCHIPS d = new DASIGNACIONCHIPS();
+        	d.setIDUBICACION(rs.getString("IDUBICACION"));
+        	lista.add(d);
+        }
+        return lista;
 	}
 }

@@ -31,7 +31,10 @@ import com.nisira.Inicio;
 import com.nisira.annotation.ClavePrimaria;
 import com.nisira.annotation.Columna;
 import com.nisira.core.NisiraORMException;
+import com.nisira.dao.DPROGRAMAALMEJECUCIONDao;
+import com.nisira.dao.DprogramaciontareallegadaDao;
 import com.nisira.dao.NOTIFICACIONDao;
+import com.nisira.dao.ProgramaciontareaDao;
 import com.nisira.entidad.NOTIFICACION;
 import com.nisira.utils.NisiraUtils;
 import com.nisira.utils.nisiracore.Constantes;
@@ -39,8 +42,11 @@ import com.nisira.vista.barras.PanelBarraMaestro;
 import com.nisira.vista.controles.NSRTable;
 import com.nisira.vista.controles.NSRTableModel;
 import com.sun.nio.sctp.Notification;
-
+import com.nisira.entidad.DPROGRAMACIONTAREALLEGADA;
+import com.nisira.entidad.DPROGRAMAALMEJECUCION;
+import com.nisira.entidad.PROGRAMACIONTAREA;
 import controlador.MensajesDialog;
+import core.inicio.ConfigInicial;
 
 public class FrmNotificacion extends AbstractWindowsMovil{
 	private static final int cellHeight=40;
@@ -279,6 +285,17 @@ public class FrmNotificacion extends AbstractWindowsMovil{
 					Inicio.notificacion=selectNotificacion;
 					/*Actualizar*/
 					notificacionesDao.actualizar(1,selectNotificacion);
+					List<PROGRAMACIONTAREA> pgt = (new ProgramaciontareaDao()).listar(1, "IDEMPRESA = ? and IDSUCURSAL = ? and IDPROGRAMACIONTAREA =?",selectNotificacion.getIDEMPRESA(),ConfigInicial.LlenarConfig()[9], selectNotificacion.getTOQUEN());
+				    for(PROGRAMACIONTAREA p : pgt){
+				    	List<DPROGRAMACIONTAREALLEGADA> dpll = (new DprogramaciontareallegadaDao()).listar(1, "IDEMPRESA = ? and IDSUCURSAL = ? and IDPROGRAMACIONTAREA =?",p.getIDEMPRESA(),p.getIDSUCURSAL(), p.getIDPROGRAMACIONTAREA());
+				    	for(DPROGRAMACIONTAREALLEGADA d : dpll){
+				    		List<DPROGRAMAALMEJECUCION> dpej = (new DPROGRAMAALMEJECUCIONDao()).listar(1, "IDEMPRESA = ? and IDSUCURSAL = ? and IDPROGRAMACIONLLENADO = ?",d.getIDEMPRESA(),d.getIDSUCURSAL(),d.getIDPROGRAMACIONLLENADO());
+				    		for(DPROGRAMAALMEJECUCION dp : dpej){
+				    			dp.setESTADO("AS");
+				    			(new DPROGRAMAALMEJECUCIONDao()).mezclar(1, dp);
+				    		}
+				    	}
+				    }
 				}
 			}else{
 				MensajesDialog.mostrarMensaje(this, "Deberá seleccionar un registro", 2);

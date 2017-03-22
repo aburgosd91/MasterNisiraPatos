@@ -47,6 +47,12 @@ public class DASIGNACIONCHIPSDao extends BaseDao<DASIGNACIONCHIPS> {
         while(rs.next()){
         	DASIGNACIONCHIPS d = new DASIGNACIONCHIPS();
         	d.setIDUBICACION(rs.getString("IDUBICACION"));
+        	d.setCORDENADAX(rs.getInt("DCORDENADAX"));
+        	d.setCORDENADAY(rs.getInt("DCORDENADAY"));
+        	d.setCORDENADAXT(rs.getInt("CORDENADAX"));
+        	d.setCORDENADAYT(rs.getInt("CORDENADAY"));
+        	d.setIDEMPRESA(rs.getInt("IDEMPRESA"));
+        	d.setIDSUCURSAL(rs.getInt("IDSUCURSAL"));
         	lista.add(d);
         }
         return lista;

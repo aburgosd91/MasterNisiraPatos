@@ -76,6 +76,10 @@ public class MOVUBICACIONDao extends BaseDao<MOVUBICACION> {
 		}
 	}
 	
+	public MOVUBICACION addMovubicacion(MOVUBICACION entidad) throws NisiraORMException {
+		mezclar(1, entidad);
+		return null;
+	}
 	public MOVUBICACION getUbicacionContenido(Integer IDEMPRESA,Integer IDSUCURSAL,
 			Integer IDMOVUBICACION) throws NisiraORMException, SQLException {
 		

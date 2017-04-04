@@ -838,6 +838,10 @@ public class FrmSysZona extends NSRInternalFrame implements InternalFrameListene
 				/**********************************
 				 * LLENAR DATOS
 				 **************************************/
+				MOVUBICACIONDao movubicacionDao = new MOVUBICACIONDao();
+				MOVUBICACION movubicacion = new MOVUBICACION();
+				movubicacion.setCORDENADAX(1);
+//				movubicacionDao.list)
 				BarcodeTexto cajaTexto = new BarcodeTexto(mapa);
 				panelCabecera.add(cajaTexto);
 			}

@@ -703,7 +703,7 @@ public class FrmPackingList extends AbstractMaestro {
 				mapa= new HashMap<String,String>();
 				listDGeneracionCodigo 	=	(new DGENERACIONCODIGOSDao()).listar(1,"IDEMPRESA = ? and IDGENERACION = ?",gc.getIDEMPRESA(),gc.getIDGENERACION());
 				/*BUSCAR CÓDIGO CON LONGITUD REQUERIDA*/
-				codigo=buscarCadenaxLongitud(listcodigo,gc.getNUMDIGITOTOTAL());
+				codigo=buscarCadenaxLongitud(listcodigo,gc.getBARCODETOTAL());
 				j=0;
 				for(DGENERACIONCODIGOS dgc : listDGeneracionCodigo){
 					mapa.put(dgc.getPARAMETRO(), codigo.substring(j,j+dgc.getNUMDIGITO()));

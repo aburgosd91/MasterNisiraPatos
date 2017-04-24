@@ -480,7 +480,7 @@ public class FrmSysZona08092015 extends NSRInternalFrame implements InternalFram
         		manuaCodigoBarra.setLocation(getWidth()/2,(getHeight()/2)-100);
         		/*DEFINICIONES*/
     			for(GENERACIONCODIGOS gc : listGeneracionCodigo){
-        			manuaCodigoBarra.listField.add(new JTextLabelPanel(pos++,gc.getIDGENERACION().toString(),gc.getDESCRIPCION().toString(), "",gc.getNUMDIGITOTOTAL()){
+        			manuaCodigoBarra.listField.add(new JTextLabelPanel(pos++,gc.getIDGENERACION().toString(),gc.getDESCRIPCION().toString(), "",gc.getBARCODETOTAL()){
     					@Override
     					public void ordenfocusPanel(){
     						if(manuaCodigoBarra.listField.size()-1== row)
@@ -704,7 +704,7 @@ public class FrmSysZona08092015 extends NSRInternalFrame implements InternalFram
 				mapa= new HashMap<String,String>();
 				listDGeneracionCodigo 	=	(new DGENERACIONCODIGOSDao()).listar(1,"IDEMPRESA = ? and IDGENERACION = ?",gc.getIDEMPRESA(),gc.getIDGENERACION());
 				/*BUSCAR CÓDIGO CON LONGITUD REQUERIDA*/
-				codigo=buscarCadenaxLongitud(listcodigo,gc.getNUMDIGITOTOTAL());
+				codigo=buscarCadenaxLongitud(listcodigo,gc.getBARCODETOTAL());
 				j=0;
 				for(DGENERACIONCODIGOS dgc : listDGeneracionCodigo){
 					mapa.put(dgc.getPARAMETRO(), codigo.substring(j,j+dgc.getNUMDIGITO()));

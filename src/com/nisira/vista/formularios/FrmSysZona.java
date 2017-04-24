@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
+import java.util.StringJoiner;
 
 import javax.swing.BoxLayout;
 import javax.swing.GroupLayout;
@@ -245,12 +246,12 @@ public class FrmSysZona extends NSRInternalFrame implements InternalFrameListene
 					"FrmSysZona", 1, programacionTarea.getIDPROCESO());
 			/******* RECONSTRUCCIÓN DE XML **********/
 			if (listGeneracionCodigo.size() > 0)
-				GeneracionCodigoXml.reconstruccionXML(listGeneracionCodigo);
-			/* CARGA PROGRAMACION */
-			/* RECONOCIMIENTO DE CHIPS */
-			setListDAsignacionChips((new DASIGNACIONCHIPSDao()).getListAdsignacionChips(
-					Integer.parseInt(ConfigInicial.LlenarConfig()[8]),
-					Integer.parseInt(ConfigInicial.LlenarConfig()[9])));
+				// GeneracionCodigoXml.reconstruccionXML(listGeneracionCodigo);
+				/* CARGA PROGRAMACION */
+				/* RECONOCIMIENTO DE CHIPS */
+				setListDAsignacionChips((new DASIGNACIONCHIPSDao()).getListAdsignacionChips(
+						Integer.parseInt(ConfigInicial.LlenarConfig()[8]),
+						Integer.parseInt(ConfigInicial.LlenarConfig()[9])));
 			/* CARGAR CONFIGURACION DE ACTIVIDADES */
 			// listConfigActividades = (new
 			// CONFIGACTIVIDADESDao()).listar(1,true);
@@ -409,7 +410,7 @@ public class FrmSysZona extends NSRInternalFrame implements InternalFrameListene
 				/* DEFINICIONES */
 				for (GENERACIONCODIGOS gc : listGeneracionCodigo) {
 					manualCodigoBarra.listField.add(new JTextLabelPanel(pos++, gc.getIDGENERACION().toString(),
-							gc.getDESCRIPCION(), "", gc.getNUMDIGITOTOTAL()) {
+							gc.getDESCRIPCION(), "", gc.getBARCODETOTAL()) {
 						@Override
 						public void ordenfocusPanel() {
 							if (manualCodigoBarra.listField.size() - 1 == row)
@@ -612,7 +613,7 @@ public class FrmSysZona extends NSRInternalFrame implements InternalFrameListene
 		/* DEFINICIONES */
 		for (GENERACIONCODIGOS gc : listGeneracionCodigo) {
 			manualCodigoBarra.listField.add(new JTextLabelPanel(pos++, gc.getIDGENERACION().toString(),
-					gc.getDESCRIPCION(), "", gc.getNUMDIGITOTOTAL()) {
+					gc.getDESCRIPCION(), "", gc.getBARCODETOTAL()) {
 				@Override
 				public void ordenfocusPanel() {
 					if (manualCodigoBarra.listField.size() - 1 == row)
@@ -816,10 +817,19 @@ public class FrmSysZona extends NSRInternalFrame implements InternalFrameListene
 			 * TRAER DATOS DE CONSOLE
 			 *************************/
 			ArrayList<String> listcodigo = new ArrayList<String>();
-			for (int x = 1; x <= listGeneracionCodigo.size(); x++) {
-				codigo = Constantes.buscarFragmentoTexto(console, charI, charF, x);
-				listcodigo.add(codigo);
+			int x=1;
+			for (GENERACIONCODIGOS gc : listGeneracionCodigo) {
+				listDGeneracionCodigo = (new DGENERACIONCODIGOSDao()).listar(1, "IDEMPRESA = ? and IDGENERACION = ?",
+						gc.getIDEMPRESA(), gc.getIDGENERACION());
+				for (DGENERACIONCODIGOS d:  listDGeneracionCodigo) {
+					codigo = Constantes.buscarFragmentoTexto(console, charI, charF, x);
+					listcodigo.add(codigo);
+					x++;
+					 
+				}
 			}
+			
+			
 			/**************************
 			 * RECORRER CABECERA
 			 ********************************/
@@ -828,20 +838,27 @@ public class FrmSysZona extends NSRInternalFrame implements InternalFrameListene
 				listDGeneracionCodigo = (new DGENERACIONCODIGOSDao()).listar(1, "IDEMPRESA = ? and IDGENERACION = ?",
 						gc.getIDEMPRESA(), gc.getIDGENERACION());
 				/* BUSCAR CÓDIGO CON LONGITUD REQUERIDA */
-				codigo = buscarCadenaxLongitud(listcodigo, gc.getNUMDIGITOTOTAL(), gc.getIDGENERACION());
 				j = 0;
+				StringJoiner con = new StringJoiner(",");
 				for (DGENERACIONCODIGOS dgc : listDGeneracionCodigo) {
-					mapa.put(dgc.getPARAMETRO(), codigo);
-					//mapa.put(dgc.getPARAMETRO(), codigo.substring(j, j + dgc.getNUMDIGITO()));
+					codigo = buscarCadenaxLongitud(listcodigo, dgc.getNUMDIGITO(), gc.getIDGENERACION());
+					if(codigo.equalsIgnoreCase("")){
+						continue;
+					}
+					listcodigo.remove(listcodigo.indexOf(codigo));
+					con.add(codigo);
+					// mapa.put(dgc.getPARAMETRO(), codigo.substring(j, j +
+					// dgc.getNUMDIGITO()));
 					j += dgc.getNUMDIGITO();
 				}
+				mapa.put(gc.getDESCRIPCION(),con.toString());
 				/**********************************
 				 * LLENAR DATOS
 				 **************************************/
 				MOVUBICACIONDao movubicacionDao = new MOVUBICACIONDao();
 				MOVUBICACION movubicacion = new MOVUBICACION();
 				movubicacion.setCORDENADAX(1);
-//				movubicacionDao.list)
+				// movubicacionDao.list)
 				BarcodeTexto cajaTexto = new BarcodeTexto(mapa);
 				panelCabecera.add(cajaTexto);
 			}
@@ -858,15 +875,17 @@ public class FrmSysZona extends NSRInternalFrame implements InternalFrameListene
 		String cadena = "";
 		for (String str : lista) {
 			if (str.length() == tamanio) {
-				if (tamanio == 1) {
+				if (tamanio <=3) {
+					if(Integer.parseInt(str.substring(0,1)) == col ){
+						cadena = str;
+						break;	
+					}
+					
+				} else {
 					cadena = str;
 					break;
-				} else if (Integer.parseInt(str.substring(0, tamanio - 1)) == col-1) {
-					//cadena = str;
-					cadena = String.valueOf(str.charAt(str.length()-1));
-					break;
 				}
-				
+
 			}
 		}
 		return cadena;

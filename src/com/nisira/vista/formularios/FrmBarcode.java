@@ -112,7 +112,7 @@ public class FrmBarcode extends AbstractMaestro {
 		});
 
 		tblOpciones = new NSRTable(
-				new NSRTableModel(new String[] { "IdRegistro", "Parametro", "Digito", "Total", "Sincronizado" }) {
+				new NSRTableModel(new String[] { "IdRegistro", "Parametro", "Digito", "Sincronizado" }) {
 
 					/**
 					 * 
@@ -323,7 +323,9 @@ public class FrmBarcode extends AbstractMaestro {
 				barcode = new BarcodeXML();
 				barcode.setInicio("@~");
 				barcode.setFin("~@");
-				barcode.setTotal(gc.getNUMDIGITOTOTAL());
+				barcode.setTotal(gc.getBARCODETOTAL());
+				barcode.setDescripcion(gc.getDESCRIPCION());
+				barcode.setNumini(gc.getIDGENERACION().toString());
 				barcode.setDig(new ArrayList<Digitos>());
 				listDGeneracionCodigos = getdGeneracionCodigosDao().listar(1, "IDEMPRESA = ? and IDGENERACION = ?",
 						gc.getIDEMPRESA(), gc.getIDGENERACION());
@@ -371,7 +373,7 @@ public class FrmBarcode extends AbstractMaestro {
 		String idIdgeneracion = txtIdGeneracion.getText();
 		getGeneracionCodigos().setIDGENERACION(Integer.parseInt(idIdgeneracion));
 		getGeneracionCodigos().setDESCRIPCION(txtDescripcion.getText());
-		getGeneracionCodigos().setNUMDIGITOTOTAL(Integer.parseInt(txtTotalDigito.getText()));
+		getGeneracionCodigos().setBARCODETOTAL(Integer.parseInt(txtTotalDigito.getText()));
 		getGeneracionCodigos().setSINCRONIZADO(chkSincronizado.isSelected() ? 1 : 0);
 
 		// String idgrupo = txtIdGeneracion.getText();
@@ -388,8 +390,7 @@ public class FrmBarcode extends AbstractMaestro {
 			dGeneracionCodigos.setIDREGISTROCODIGO(Integer.parseInt(getDetalleTM().getValueAt(i, 0).toString()));
 			dGeneracionCodigos.setPARAMETRO(getDetalleTM().getValueAt(i, 1).toString());
 			dGeneracionCodigos.setNUMDIGITO(Integer.parseInt(getDetalleTM().getValueAt(i, 2).toString()));
-			dGeneracionCodigos.setNUMDIGITOTOTAL(Integer.parseInt(getDetalleTM().getValueAt(i, 3).toString()));
-			dGeneracionCodigos.setSINCRONIZADO(((boolean) getDetalleTM().getValueAt(i, 4)) ? 1 : 0);
+			dGeneracionCodigos.setSINCRONIZADO(((boolean) getDetalleTM().getValueAt(i, 3)) ? 1 : 0);
 			listDGeneracionCodigos.add(dGeneracionCodigos);
 		}
 		// privilegios = new ArrayList<GrupoUsuarioPrivilegio>();
@@ -433,7 +434,7 @@ public class FrmBarcode extends AbstractMaestro {
 			if (getGeneracionCodigos() != null) {
 				txtIdGeneracion.setText(Constantes.llenarCerosDigitosTres(getGeneracionCodigos().getIDGENERACION()));
 				txtDescripcion.setText(getGeneracionCodigos().getDESCRIPCION());
-				txtTotalDigito.setText(Constantes.llenarCerosDigitosTres(generacionCodigos.getNUMDIGITOTOTAL()));
+				txtTotalDigito.setText(Constantes.llenarCerosDigitosTres(generacionCodigos.getBARCODETOTAL()));
 				txtFecha.setText(generacionCodigos.getFECHACREACION() != null
 						? generacionCodigos.getFECHACREACION().toGMTString() : "");
 				if (generacionCodigos.getSINCRONIZADO() == null) {
@@ -447,8 +448,7 @@ public class FrmBarcode extends AbstractMaestro {
 					boolean sincronizar;
 					sincronizar = (dgc.getSINCRONIZADO() == 1);
 					getDetalleTM().addRow(new Object[] { dgc.getIDREGISTROCODIGO().toString(), dgc.getPARAMETRO(),
-							dgc.getNUMDIGITO().toString(), dgc.getNUMDIGITOTOTAL().toString(),
-							dgc.getSINCRONIZADO() == 1 });
+							dgc.getNUMDIGITO().toString(),dgc.getSINCRONIZADO() == 1 });
 				}
 			}
 			// if (getGrupoUsuario() != null) {
@@ -503,7 +503,7 @@ public class FrmBarcode extends AbstractMaestro {
 		model.limpiar();
 
 		for (GENERACIONCODIGOS gc : getListGeneracionCodigos()) {
-			model.addRow(new Object[] { gc.getIDGENERACION(), gc.getDESCRIPCION(), gc.getNUMDIGITOTOTAL() });
+			model.addRow(new Object[] { gc.getIDGENERACION(), gc.getDESCRIPCION(), gc.getBARCODETOTAL() });
 
 		}
 		if (getListGeneracionCodigos().size() > 0) {

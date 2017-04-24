@@ -9,6 +9,8 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 public class BarcodeXML  implements Serializable{
 	private String inicio;/*Caracter Inicio de Lectura por codigo*/
 	private String fin;/*Caracter Fin de Lectura por codigo*/
+	private String descripcion;
+	private String numini;
 	private int total;/**/
 //	private int cantidad;/**/
 	private List<Digitos> digitos;
@@ -31,6 +33,31 @@ public class BarcodeXML  implements Serializable{
 	public void setFin(String fin) {
 		this.fin = fin;
 	}
+	
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	public String getNumini() {
+		return numini;
+	}
+
+	public void setNumini(String numini) {
+		this.numini = numini;
+	}
+
+	public List<Digitos> getDigitos() {
+		return digitos;
+	}
+
+	public void setDigitos(List<Digitos> digitos) {
+		this.digitos = digitos;
+	}
+
 	public int getTotal() {
 		return total;
 	}

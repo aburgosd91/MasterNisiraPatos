@@ -20,7 +20,7 @@ public class GENERACIONCODIGOS {
 	@Columna
 	private String DESCRIPCION;
 	@Columna
-	private Integer NUMDIGITOTOTAL;
+	private Integer BARCODETOTAL;
 	@Columna
 	private Date FECHACREACION;
 	@Columna
@@ -66,12 +66,12 @@ public class GENERACIONCODIGOS {
 		return this.DESCRIPCION;
 	}
 
-	public void setNUMDIGITOTOTAL(Integer NUMDIGITOTOTAL) {
-		this.NUMDIGITOTOTAL = NUMDIGITOTOTAL;
+	public Integer getBARCODETOTAL() {
+		return BARCODETOTAL;
 	}
 
-	public Integer getNUMDIGITOTOTAL() {
-		return this.NUMDIGITOTOTAL;
+	public void setBARCODETOTAL(Integer bARCODETOTAL) {
+		BARCODETOTAL = bARCODETOTAL;
 	}
 
 	public void setFECHACREACION(Date FECHACREACION) {
@@ -115,7 +115,7 @@ public class GENERACIONCODIGOS {
 
 	@Override
 	public String toString() {
-		return "[" + IDEMPRESA + ", " + IDGENERACION + ", " + (TIPO==null?"Null":TIPO) + ", " + DESCRIPCION + ", " + (NUMDIGITOTOTAL==null?"Null":NUMDIGITOTOTAL) + ", "
+		return "[" + IDEMPRESA + ", " + IDGENERACION + ", " + (TIPO==null?"Null":TIPO) + ", " + DESCRIPCION + ", " + (BARCODETOTAL==null?"Null":BARCODETOTAL) + ", "
 				+ FECHACREACION + ", " + (ESTADO==null?"Null":ESTADO) + ", " + (SINCRONIZADO==null?"Null":SINCRONIZADO) + ", " + PARAMETRO + ","+IDPROCESO+"]";
 	}
 

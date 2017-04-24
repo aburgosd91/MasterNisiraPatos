@@ -19,10 +19,6 @@ public class DGENERACIONCODIGOS {
 	@Columna
 	private Integer IDREGISTROCODIGO;
 	@Columna
-	private Integer IDPARAMETRO;
-	@Columna
-	private Integer NUMDIGITOTOTAL;
-	@Columna
 	private Integer NUMDIGITO;
 	@Columna
 	private Integer SINCRONIZADO;
@@ -57,23 +53,6 @@ public class DGENERACIONCODIGOS {
 	public Integer getIDREGISTROCODIGO() {
 		return this.IDREGISTROCODIGO;
 	}
-
-	public void setIDPARAMETRO(Integer IDPARAMETRO) {
-		this.IDPARAMETRO = IDPARAMETRO;
-	}
-
-	public Integer getIDPARAMETRO() {
-		return this.IDPARAMETRO;
-	}
-
-	public void setNUMDIGITOTOTAL(Integer NUMDIGITOTOTAL) {
-		this.NUMDIGITOTOTAL = NUMDIGITOTOTAL;
-	}
-
-	public Integer getNUMDIGITOTOTAL() {
-		return this.NUMDIGITOTOTAL;
-	}
-
 	public void setNUMDIGITO(Integer NUMDIGITO) {
 		this.NUMDIGITO = NUMDIGITO;
 	}
@@ -116,8 +95,8 @@ public class DGENERACIONCODIGOS {
 
 	@Override
 	public String toString() {
-		return "[" + IDEMPRESA + ", " + IDGENERACION + ", " + (IDREGISTROCODIGO==null?"Null":IDREGISTROCODIGO) + ", " + (IDPARAMETRO==null?"Null":IDPARAMETRO) + ", "
-				+ (NUMDIGITOTOTAL==null?"Null":NUMDIGITOTOTAL) + ", " + (NUMDIGITO==null?"Null":NUMDIGITO) + ", " + (SINCRONIZADO==null?"Null":SINCRONIZADO) + ", " + PARAMETRO + ", " + FECHACREACION
+		return "[" + IDEMPRESA + ", " + IDGENERACION + ", " + (IDREGISTROCODIGO==null?"Null":IDREGISTROCODIGO)  + ", "
+				+ ", " + (NUMDIGITO==null?"Null":NUMDIGITO) + ", " + (SINCRONIZADO==null?"Null":SINCRONIZADO) + ", " + PARAMETRO + ", " + FECHACREACION
 				+ ", " + (TIPOVALOR==null?"Null":TIPOVALOR) + "]";
 	}
 	

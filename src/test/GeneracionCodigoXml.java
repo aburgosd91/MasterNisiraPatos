@@ -25,7 +25,8 @@ public class GeneracionCodigoXml {
 			barcode=new BarcodeXML();
 			barcode.setInicio(ConfigInicial.LlenarConfig()[11]);
 			barcode.setFin(ConfigInicial.LlenarConfig()[12]);
-			barcode.setTotal(gc.getNUMDIGITOTOTAL());
+			barcode.setTotal(gc.getBARCODETOTAL());
+			barcode.setNumini(gc.getIDGENERACION().toString());
 			barcode.setDig(new ArrayList<Digitos>());
 			listDGeneracionCodigos=(new DGENERACIONCODIGOSDao()).listar(1,"IDEMPRESA = ? AND IDGENERACION = ?",ConfigInicial.LlenarConfig()[8],gc.getIDGENERACION());
 			for(DGENERACIONCODIGOS dgc: listDGeneracionCodigos){
